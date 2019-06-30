@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta charset="UTF-8">
+	<link rel="stylesheet" type="text/css" href="app.css">
+  <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+</head>
+<body class="searching">
+  <h2 class="logo">Gems </h2><span class="slogan">Conoce la ruta de tu bus en Lima</span>
+  <div class="main_container">
+    <div class="form_container">
+      <form class="form-content">
+		<input type="text" name="location" placeholder="Mi Ubicación" disabled>
+        <input type="text" name="search" placeholder="UPN Breña">
+        <button>Buscar</button>
+      </form>  
+    </div>
+	<div class="result">
+		<div class="routes">
+			<div class="w3-bar w3-black routes_button">
+			  <button class="w3-bar-item w3-button" onclick="openRes('res1')">30 min</button>
+			  <button class="w3-bar-item w3-button" onclick="openRes('res2')">35 min</button>
+			  <button class="w3-bar-item w3-button" onclick="openRes('res3')">38 min</button>
+			</div>
+			<div id="res1" class="w3-container route">
+			  <h2>El Chino E.T.S.</h2>
+			  <img src="assets/img/searching_01.png" class="result_content">
+			</div>
+
+			<div id="res2" class="w3-container route" style="display:none">
+			  <h2>Chama E.T.S.</h2>
+			  <img src="assets/img/searching_02.png" class="result_content"> 
+			</div>
+
+			<div id="res3" class="w3-container route" style="display:none">
+			  <h2>ETCHUSA S.A.C.</h2>
+			  <img src="assets/img/searching_03.png" class="result_content">
+			</div>
+		</div>
+	</div>
+  </div>
+	<script>
+		function openRes(res) {
+			var i;
+			var x = document.getElementsByClassName("route");
+			for (i = 0; i < x.length; i++) {
+				x[i].style.display = "none";  
+			}
+			document.getElementById(res).style.display = "block";  
+		}
+	</script>
+  
+  
+</body>
+</html>
