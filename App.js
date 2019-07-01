@@ -8,11 +8,8 @@ import Driver  from './components/Driver';
 export default class App extends React.Component {
   constructor(props){
     super(props);
-    this.gems_url = 'https://djgems.herokuapp.com/api/gems/';
-    this._getGems();
-    this.state = {
+   this.state = {
       region: null,
-      gems_url: this.gems_url,
     }
     this._getLocationAsync();
   }
@@ -38,20 +35,12 @@ export default class App extends React.Component {
       }
     )
   }
-  _getGems = async () => {
-    fetch(this.gems_url)
-    .then(res => res.json())
-    .then( res => {
-      this.state.gems = res;
-      // console.log(this.state.gems);
-    });
-  }
 
   componentDidMount(){
     // this.getGems();
   }
 
-
+  getLocation(){}
   centerMap(){
     const { latitude, longitude, latitudeDelta, longitudeDelta } = this.state.region;
     this.map.animateToRegion({
@@ -61,24 +50,15 @@ export default class App extends React.Component {
       longitudeDelta,
     })
   }
-
-  getLocation(id){
-    let loc = {
-      longitude: 0,
-      latitude: 0,
-    };
-    let gems = this.state.gems ? this.state.gems : [];
-    gems.forEach(function(gem){
-      if(gem.id == id){
-        loc = {
-          longitude: gem.longitude,
-          latitude: gem.latitude,
-        }
-      }
+  getGem = (uid) => {
+    let gems_url = 'https://djgems.herokuapp.com/api/gems/';
+    return fetch(gems_url+uid)
+    .then(res => res.json())
+    .then( res => {
+      let loc = {latitude:res.latitude, longitude:res.longitude};
+      console.log(loc);
+      return loc;
     });
-    console.log("Loc");
-    console.log(loc);
-    return loc;
   }
 
   render() {
@@ -95,13 +75,14 @@ export default class App extends React.Component {
           ref={(map) => {this.map = map}}
           style={{flex: 1}}
         >
-        <Driver driver={{uid: '1', location: this.getLocation(1),}}/>
-        <Driver driver={{uid: '2', location: this.getLocation(2),}}/>
-        <Driver driver={{uid: '3', location: this.getLocation(3),}}/>
+        <Driver driver={{ uid: '1', location: {latitude:0,longitude:0} }}/>
+        <Driver driver={{ uid: '2', location: {latitude:0,longitude:0} }}/>
+        <Driver driver={{ uid: '3', location: this.getGem(3) }}/>
         </MapView>
       </View>
     );
   }
+  // this.getGem(1)
 }
 
 const styles = StyleSheet.create({

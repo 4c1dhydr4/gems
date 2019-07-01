@@ -15,8 +15,8 @@ export default class Driver extends React.Component {
 				location: { latitude: 0, longitude: 0}
 			}
 		const coordinate = new MapView.AnimatedRegion({
-			latitude: driver.location.latitude,
-			longitude: driver.location.longitude,
+			latitude: driver.location.latitude ? driver.location.latitude : 0,
+			longitude: driver.location.longitude ? driver.location.longitude : 0,
 		})
 		this.state = {
 			driver: driver,
