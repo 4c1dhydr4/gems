@@ -8,6 +8,7 @@ import {
   TextInput,
   Dimensions,
   TouchableOpacity,
+  Alert,
 } from 'react-native';
 
 import bgImage from './assets/background.png'
@@ -21,6 +22,47 @@ export default class Example extends Component {
     this.state = {
       showPass: true,
       press: false,
+      username: "",
+      password: "",
+    }
+  }
+  validation = () => {
+    let res = {
+      username: "hola",    
+      password: "hola",
+    }
+    this.myValidate(res);
+    /*
+    const {username, password} = this.state;
+    let gems_url = 'https://djgems.herokuapp.com/api/users/';
+    fetch(gems_url+username)
+    .then(res => res.json())
+    .then( res => {
+        console.log(res);
+          myValidate(res);
+      }
+    );
+    */
+  }
+  myValidate = (auth) =>{
+    const {username, password} = this.state;
+    if(username == auth.username && password == auth.password){
+      Alert.alert('Autenticación Exitosa');
+    }
+    else if(username == auth.username && password != auth.password){
+      Alert.alert('Contraseña Incorrecta');
+    }
+    else if(username == "" && password == ""){
+      Alert.alert('Ingrese Usuario y Contraseña');
+    }
+    else if(username == ""){
+      Alert.alert('Ingrese el Usuario');
+    }
+    else if(password == ""){
+      Alert.alert('Ingrese la Contraseña');
+    }
+    else{
+      Alert.alert('Usuario no encontrado');
     }
   }
   showPassw = () =>{
@@ -45,6 +87,7 @@ export default class Example extends Component {
             placeholder={ 'Usuario'}
             placeholderTextColor={ 'rgba(255,255,255,0.7)'}
             underlineColorAndroid='transparent'
+            onChangeText={username => this.setState({username})}
           />
         </View>
         <View style={styles.inputContainer}>
@@ -56,14 +99,20 @@ export default class Example extends Component {
             secureTextEntry={this.state.showPass}
             placeholderTextColor={ 'rgba(255,255,255,0.7)'}
             underlineColorAndroid='transparent'
+            onChangeText={password => this.setState({password})}
           />
           <TouchableOpacity style={styles.btnEye} 
             onPress={this.showPassw.bind(this)}>
             <Icon name={this.state.press == false ? 'ios-eye' : 'ios-eye-off'} size={26} color={'rgba(255,255,255,0.7)'} />
           </TouchableOpacity>
         </View>
-        <TouchableOpacity style={styles.btnLogin}>
-          <Text style={styles.text}>Ingresar</Text>
+        <TouchableOpacity 
+          style={styles.btnLogin}
+          onPress={this.validation.bind(this)}>
+          <Text style={styles.text}
+            onPress={this.validation.bind(this)}>
+            Ingresar
+          </Text>
         </TouchableOpacity>
       </ImageBackground>
     );
