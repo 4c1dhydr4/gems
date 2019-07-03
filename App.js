@@ -1,93 +1,131 @@
-import React from 'react';
-import { StyleSheet, Text, View, Button } from 'react-native';
-import { MapView, Permissions, Location } from 'expo';
-import { DestinationButton } from './components/DestinationButton';
-import { CurrentLocationButton } from './components/CurrentLocationButton';
-import Driver  from './components/Driver';
+import React, { Component } from 'react';
+import { 
+  StyleSheet, 
+  Text, 
+  View, 
+  Image, 
+  ImageBackground,
+  TextInput,
+  Dimensions,
+  TouchableOpacity,
+} from 'react-native';
 
-export default class App extends React.Component {
-  constructor(props){
-    super(props);
-   this.state = {
-      region: null,
+import bgImage from './assets/background.png'
+import logo from './assets/logo.jpg'
+import Icon from 'react-native-vector-icons/Ionicons'
+
+const { width: WIDTH } = Dimensions.get('window')
+export default class Example extends Component {
+  constructor(){
+    super();
+    this.state = {
+      showPass: true,
+      press: false,
     }
-    this._getLocationAsync();
   }
-
-  _getLocationAsync = async () => {
-    let { status } = await Permissions.askAsync(Permissions.LOCATION);
-
-    if(status !== 'granted')
-      console.log('Permiso de acceso a GPS denegado.')
-
-    let location = await Location.getCurrentPositionAsync({enabledHighAcurracy: true})
-
-    let region = {
-      latitude: location.coords.latitude,
-      longitude: location.coords.longitude,
-      latitudeDelta: 0.045,
-      longitudeDelta: 0.045,
+  showPassw = () =>{
+    if(this.state.press == false){
+      this.setState({showPass: false, press:true});
+    }else{
+      this.setState({showPass: true, press:false});
     }
-
-    this.setState(
-      {
-        region: region,
-      }
-    )
   }
-
-  componentDidMount(){
-    // this.getGems();
-  }
-
-  getLocation(){}
-  centerMap(){
-    const { latitude, longitude, latitudeDelta, longitudeDelta } = this.state.region;
-    this.map.animateToRegion({
-      latitude,
-      longitude,
-      latitudeDelta,
-      longitudeDelta,
-    })
-  }
-  getGem = (uid) => {
-    let gems_url = 'https://djgems.herokuapp.com/api/gems/';
-    return fetch(gems_url+uid)
-    .then(res => res.json())
-    .then( res => {
-      let loc = {latitude:res.latitude, longitude:res.longitude};
-      console.log(loc);
-      return loc;
-    });
-  }
-
-  render() {
+  render(){
     return (
-      <View style={styles.container}>
-        <Text>React Native App! - Gems UPN Public Bus Manager</Text>
-        <DestinationButton/>
-        <CurrentLocationButton cb={() => { this.centerMap() }}/>
-        <MapView
-          initialRegion={this.state.region}
-          showsUserLocation={true}
-          showsCompass={true}
-          rotateEnabled={false}
-          ref={(map) => {this.map = map}}
-          style={{flex: 1}}
-        >
-        <Driver driver={{ uid: '1', location: {latitude:0,longitude:0} }}/>
-        <Driver driver={{ uid: '2', location: {latitude:0,longitude:0} }}/>
-        <Driver driver={{ uid: '3', location: this.getGem(3) }}/>
-        </MapView>
-      </View>
+      <ImageBackground source={bgImage} style={styles.backgroundContainer}>
+        <View style={styles.logoContainer} >
+          <Image source={logo} style={styles.logo} />
+          <Text style={styles.logoText}>GEMS APP</Text>
+        </View>
+        <View style={styles.inputContainer}>
+          <Icon style={styles.inputIcon} name={'ios-person'} 
+          size={28} color={'rgba(255,255,255,0.7)'} />
+          <TextInput 
+            style={styles.input}
+            placeholder={ 'Usuario'}
+            placeholderTextColor={ 'rgba(255,255,255,0.7)'}
+            underlineColorAndroid='transparent'
+          />
+        </View>
+        <View style={styles.inputContainer}>
+          <Icon style={styles.inputIcon} name={'ios-lock'} 
+          size={28} color={'rgba(255,255,255,0.7)'} />
+          <TextInput 
+            style={styles.input}
+            placeholder={ 'Password'}
+            secureTextEntry={this.state.showPass}
+            placeholderTextColor={ 'rgba(255,255,255,0.7)'}
+            underlineColorAndroid='transparent'
+          />
+          <TouchableOpacity style={styles.btnEye} 
+            onPress={this.showPassw.bind(this)}>
+            <Icon name={this.state.press == false ? 'ios-eye' : 'ios-eye-off'} size={26} color={'rgba(255,255,255,0.7)'} />
+          </TouchableOpacity>
+        </View>
+        <TouchableOpacity style={styles.btnLogin}>
+          <Text style={styles.text}>Ingresar</Text>
+        </TouchableOpacity>
+      </ImageBackground>
     );
   }
-  // this.getGem(1)
 }
 
 const styles = StyleSheet.create({
-  container: {
+  backgroundContainer:{
     flex: 1,
-    backgroundColor: '#fff',
+    width: null,
+    height: null,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  logoContainer:{
+    alignItems: 'center',
+    marginBottom: 20,
+  },
+  logo:{
+    width:150,
+    height:150,
+  },
+  logoText:{
+    color: 'white',
+    fontSize: 20,
+    marginTop: 10,
+    opacity: 0.9,
+  },
+  inputContainer:{
+    marginTop: 10,
+  },
+  input:{
+    width: WIDTH - 55,
+    height: 45,
+    borderRadius: 45,
+    fontSize: 16,
+    paddingLeft: 45,
+    backgroundColor: 'rgba(0, 0, 0, 0.35)',
+    color: 'rgba(255, 255, 255, 0.7)',
+    marginHorizontal: 25,
+  },
+  inputIcon:{
+    position: 'absolute',
+    top: 10,
+    left: 37,
+  },
+  btnEye:{
+    position: 'absolute',
+    top: 10,
+    right: 37,
+  },
+  btnLogin:{
+    width: WIDTH - 55,
+    height: 45,
+    borderRadius: 45,
+    backgroundColor: '#FF7F60',
+    justifyContent: 'center',
+    marginTop: 20,
+  },
+  text:{
+    color: 'rgba(0, 0, 0, 1)',
+    fontSize: 16,
+    textAlign: 'center',
   },
 });
