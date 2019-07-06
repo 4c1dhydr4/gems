@@ -1,13 +1,19 @@
 import React from 'react';
 import { StyleSheet, Text, View, Button } from 'react-native';
 import { MapView, Permissions, Location } from 'expo';
-import { DestinationButton } from './components/DestinationButton';
-import { CurrentLocationButton } from './components/CurrentLocationButton';
-import Driver  from './components/Driver';
+import { DestinationButton } from '../components/DestinationButton';
+import { CurrentLocationButton } from '../components/CurrentLocationButton';
+import Driver  from '../components/Driver';
 
-export default class App extends React.Component {
+export default class Maps extends React.Component {
+  static navigationOptions =
+  {
+    title: 'Gems Map',
+    headerVisible: false,
+  };
   constructor(props){
-    super(props);
+   super(props);
+   this.first_loc = { latitude: -12.058683, longitude: -77.038726};
    this.state = {
       region: null,
     }
@@ -50,16 +56,6 @@ export default class App extends React.Component {
       longitudeDelta,
     })
   }
-  getGem = (uid) => {
-    let gems_url = 'https://djgems.herokuapp.com/api/gems/';
-    return fetch(gems_url+uid)
-    .then(res => res.json())
-    .then( res => {
-      let loc = {latitude:res.latitude, longitude:res.longitude};
-      console.log(loc);
-      return loc;
-    });
-  }
 
   render() {
     return (
@@ -75,14 +71,13 @@ export default class App extends React.Component {
           ref={(map) => {this.map = map}}
           style={{flex: 1}}
         >
-        <Driver driver={{ uid: '1', location: {latitude:0,longitude:0} }}/>
-        <Driver driver={{ uid: '2', location: {latitude:0,longitude:0} }}/>
-        <Driver driver={{ uid: '3', location: this.getGem(3) }}/>
+        <Driver driver={{ uid: '1', location: this.first_loc }}/>
+        <Driver driver={{ uid: '2', location: this.first_loc }}/>
+        <Driver driver={{ uid: '3', location: this.first_loc }} />
         </MapView>
       </View>
     );
   }
-  // this.getGem(1)
 }
 
 const styles = StyleSheet.create({
