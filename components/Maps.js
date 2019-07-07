@@ -13,7 +13,7 @@ export default class Maps extends React.Component {
   };
   constructor(props){
    super(props);
-   this.first_loc = { latitude: -12.058683, longitude: -77.038726};
+   this.first_loc = { latitude: -12.060583, longitude: -77.059000};
    this.state = {
       region: null,
     }

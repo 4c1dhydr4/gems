@@ -1,11 +1,17 @@
 import React, { Component } from 'react';
 
-import { AppRegistry, StyleSheet, Text, View, Button } from 'react-native';
+import { 
+  AppRegistry, 
+  StyleSheet, 
+  Text, 
+  View, 
+  Button,
+  AsyncStorage,
+} from 'react-native';
 
 import { createAppContainer, createStackNavigator } from 'react-navigation';
 
 class Profile extends Component {
-
   static navigationOptions =
   {
     title: 'Profile',
@@ -14,12 +20,31 @@ class Profile extends Component {
         headerVisible: false,
     },
   };
+  constructor(){
+    super();
+    this.state = {
+      user: {},
+    }
+    this._getUser();
+  }
 
   OpenMaps = () =>
   {
     this.props.navigation.navigate('Maps');
     
   }
+
+  _getUser = async () => {
+    try {
+      const value = await AsyncStorage.getItem('USER');
+      if (value !== null) {
+        this.setState({user: value})
+        console.log(this.state.user)
+      }
+    } catch (error) {
+      console.log("Error Guardando Usuario");
+    }
+  };
 
   render()
   {

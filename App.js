@@ -8,6 +8,8 @@ import Login from './components/Login'
 
 import Profile from './components/Profile'
 
+import UserProfile from './components/UserProfile'
+
 import Maps from './components/Maps'
 
 
@@ -15,7 +17,9 @@ const AppNavigator = createStackNavigator(
   {
    First: { screen: Login },
  
-   Profile: { screen: Profile },
+   Profile: { screen: UserProfile },
+   
+   // Profile: { screen: Profile },
 
    Maps: { screen: Maps },
   }

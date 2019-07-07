@@ -9,6 +9,7 @@ import {
   Dimensions,
   TouchableOpacity,
   Alert,
+  AsyncStorage,
 } from 'react-native';
 import { StackNavigator } from 'react-navigation';
 import bgImage from '../assets/background.png'
@@ -33,14 +34,19 @@ export default class Login extends Component {
       password: "",
     }
   }
+  _storeUser = async (user) => {
+    try {
+        await AsyncStorage.setItem('USER', JSON.stringify(user));
+    } catch (error) {
+      console.log("Error Guardando Usuario");
+    }
+  };
   validation = () => {
-    // this.LoginSuccess();
     const {username, password} = this.state;
     let gems_url = 'https://djgems.herokuapp.com/api/users/';
     fetch(gems_url+username)
     .then(res => res.json())
     .then( res => {
-        // console.log(res);
         this.myValidate(res);
       }
     );
@@ -58,6 +64,7 @@ export default class Login extends Component {
     }
     else if(username == auth.username && password == auth.password){
       // Alert.alert('Autenticación Exitosa');
+      this._storeUser(auth);
       this.LoginSuccess();
     }
     else if(username == auth.username && password != auth.password){
